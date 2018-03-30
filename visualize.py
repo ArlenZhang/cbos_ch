@@ -77,12 +77,22 @@ def data_process():
             edu_idx += 1
 
 
+def get_rand_sent(num_visualize, up_bound):
+    rand_idx = np.random.randint(0, up_bound, num_visualize)
+    idx_set = set(rand_idx)
+    while len(idx_set) < num_visualize:
+        idx_set.add(np.random.randint(0, up_bound, 1))
+    return list(idx_set)
+
+
 # len_line就是要展示的EDU个数
 def visualize(num_visualize=len_line):
     """
         输入：要显示的EDU个数
         整体Tensor数据
     """
+    # 获取随机整数
+    # idx_sent = get_rand_sent(num_visualize, len(open(os.path.join('data/edu_cdtb.tsv'), 'r').readlines()))
     most_common_words(num_visualize)
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -104,7 +114,6 @@ def most_common_words(num_visualize):
         创建 展示数据
     """
     lines = open(os.path.join('data/edu_cdtb.tsv'), 'r').readlines()[:num_visualize]
-    lines = [line for line in lines]
     with open(os.path.join('visualization/edu_' + str(num_visualize) + '.tsv'), 'w') as file:
         for line in lines:
             file.write(line.strip() + "\n")
@@ -113,7 +122,7 @@ def most_common_words(num_visualize):
 if __name__ == "__main__":
     load_data()  # 加载师哥的数据
     data_process()  # 处理数据，得到真正需要的此向量
-    visualize(100)  # 展示
+    visualize(6000)  # 展示
 
 """ 
     run tensorboard --logdir='visualization'
