@@ -6,6 +6,7 @@ import tensorflow as tf
 import torch
 import jieba.posseg
 import os
+from torch.autograd import Variable
 import pickle
 
 visual_path = 'visualization'
@@ -24,6 +25,10 @@ def load_data():
     with open(word_emb, "rb") as f:
         voc_emb_dict = torch.load(f)
     print(type(voc_emb_dict))
+    idx = Variable(torch.cuda.LongTensor([0]))
+    print(idx)
+    print(voc_emb_dict(idx))
+    
 
 # 对要处理的文件进行edbedding构建
 # def data_process():
