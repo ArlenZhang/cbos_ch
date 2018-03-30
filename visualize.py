@@ -12,7 +12,7 @@ import pickle
 
 visual_path = 'visualization'
 tensor_path = 'data/wordemb10.pth'
-visual_edus = "data/edu_choose.tsv"
+visual_edus = "data/edu_cdtb.tsv"
 
 vocab_path = "data/vocab.pickle"
 word_emb = "data/wordemb10.pth"
