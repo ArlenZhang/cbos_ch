@@ -4,7 +4,7 @@
 from tensorflow.contrib.tensorboard.plugins import projector
 import tensorflow as tf
 import torch
-import jieba.posseg
+import jieba
 import os
 import numpy as np
 from torch.autograd import Variable
@@ -37,7 +37,7 @@ def load_data():
     # 加载edu文件，统计最长edu长度
     with open(visual_edus, "r") as f:
         for line in f:
-            tmp_l = len(jieba.posseg.cut(line))
+            tmp_l = len(list(jieba.cut(line, cut_all=False)))
             if tmp_l > len_edu:
                 len_edu = tmp_l
             len_line += 1
@@ -60,13 +60,13 @@ def data_process():
         for line in f:
             tmp_vec = np.zeros(shape=(1, len_vec))
             # 对当前行的数据进行向量表示
-            temp_tuple_list = jieba.posseg.cut(line)
+            temp_tuple_list = list(jieba.cut(line, cut_all=False))
             count_len = 0
-            for word, pos in temp_tuple_list:
+            for word in temp_tuple_list:
                 if word in voc_dict.keys():
                     tmp_vec = np.add(tmp_vec, get_tensor(voc_dict[word]))
                 else:
-                    tmp_vec = np.add(tmp_vec, get_tensor(voc_dict['UNK']))
+                    tmp_vec = np.add(tmp_vec, get_tensor(voc_dict['<UNK>']))
                 count_len += 1
                 # 当前行中单词数不足
                 while count_len < len_edu:
@@ -103,9 +103,9 @@ def most_common_words(visual_fld, num_visualize):
     """
         创建 展示数据
     """
-    lines = open(os.path.join(visual_fld, 'edu_cdtb.tsv'), 'r').readlines()[:num_visualize]
+    lines = open(os.path.join('data/edu_cdtb.tsv'), 'r').readlines()[:num_visualize]
     lines = [line for line in lines]
-    with open(os.path.join(visual_fld, 'edu_' + str(num_visualize) + '.tsv'), 'w') as file:
+    with open(os.path.join('data/edu_' + str(num_visualize) + '.tsv'), 'w') as file:
         for line in lines:
             file.write(line.strip() + "\n")
 
