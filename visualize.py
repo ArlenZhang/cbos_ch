@@ -83,7 +83,7 @@ def visualize(num_visualize=len_line):
         输入：要显示的EDU个数
         整体Tensor数据
     """
-    most_common_words(visual_path, num_visualize)
+    most_common_words(num_visualize)
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         embedding_var = tf.Variable(edu_emb_matrix[:num_visualize], name='embedding_e')
@@ -99,13 +99,13 @@ def visualize(num_visualize=len_line):
         saver_embed.save(sess, os.path.join(visual_path, 'model_e.ckpt'))
 
 
-def most_common_words(visual_fld, num_visualize):
+def most_common_words(num_visualize):
     """
         创建 展示数据
     """
     lines = open(os.path.join('data/edu_cdtb.tsv'), 'r').readlines()[:num_visualize]
     lines = [line for line in lines]
-    with open(os.path.join('data/edu_' + str(num_visualize) + '.tsv'), 'w') as file:
+    with open(os.path.join('visualization/edu_' + str(num_visualize) + '.tsv'), 'w') as file:
         for line in lines:
             file.write(line.strip() + "\n")
 
@@ -114,3 +114,8 @@ if __name__ == "__main__":
     load_data()  # 加载师哥的数据
     data_process()  # 处理数据，得到真正需要的此向量
     visualize(100)  # 展示
+
+""" 
+    run tensorboard --logdir='visualization'
+    http://ArlenIAC:6006
+"""
